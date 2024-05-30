@@ -33,8 +33,6 @@ To override the default versions, you can pass the variables `K0SCTL_VERSION`,`M
       sudo ./install.sh
     ```
 
-    > P.S. Mac users might also be prompted for the password.
-
 
 4. The script is designed to detect the os and the underlying architecture. Based on this, it shall install the appropriate binaries `k0sctl`, `kubectl` and `mkectl` in `/usr/local/bin`.
    > Note: Make sure /usr/local/bin is in your PATH environment variable.

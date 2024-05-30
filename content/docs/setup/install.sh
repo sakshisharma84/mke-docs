@@ -5,7 +5,7 @@ if [ -n "${DEBUG}" ]; then
   set -x
 fi
 
-_detect_uname() {
+detect_uname() {
   os="$(uname)"
   case "$os" in
     Linux) echo "linux" ;;
@@ -15,7 +15,7 @@ _detect_uname() {
   unset os
 }
 
-_detect_arch() {
+detect_arch() {
   arch="$(uname -m)"
   case "$arch" in
     amd64|x86_64) echo "x64" ;;
@@ -26,7 +26,7 @@ _detect_arch() {
   unset arch
 }
 
-_download_wget_command() {
+download_wget_command() {
   if [ "$uname" = "linux" ];
   then
       ID="$(grep -oP '(?<=^ID=).+' /etc/os-release | tr -d '"')"
@@ -35,7 +35,7 @@ _download_wget_command() {
                 if [ "$installed" = "installed" ]; then
                         echo "wget is already installed."
                 else
-                        sudo apt-get install wget
+                        sudo apt-get -y install wget
                 fi
                 unset installed ;;
         rhel|centos) installed="$(yum info wget | grep Repo | awk '{ print $3 }')"
@@ -55,13 +55,13 @@ _download_wget_command() {
   fi
 }
 
-# _download_k0sctl_url() fetches the k0sctl download url.
-_download_k0sctl_url() {
+# download_k0sctl_url() fetches the k0sctl download url.
+download_k0sctl_url() {
   echo "https://github.com/k0sproject/k0sctl/releases/download/v$K0SCTL_VERSION/k0sctl-$uname-$arch"
 }
 
-# _download_kubectl_url() fetches the kubectl download url.
-_download_kubectl_url() {
+# download_kubectl_url() fetches the kubectl download url.
+download_kubectl_url() {
   if [ "$arch" = "x64" ];
   then
     arch=amd64
@@ -69,8 +69,8 @@ _download_kubectl_url() {
   echo "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/${uname}/${arch}/kubectl"
 }
 
-# _download_mkectl downloads the mkectl binary.
-_download_mkectl() {
+# download_mkectl downloads the mkectl binary.
+download_mkectl() {
   if [ "$arch" = "x64" ] || [ "$arch" = "amd64" ];
   then
     arch=x86_64
@@ -82,11 +82,11 @@ _download_mkectl() {
 
 main() {
 
-  uname="$(_detect_uname)"
-  arch="$(_detect_arch)"
+  uname="$(detect_uname)"
+  arch="$(detect_arch)"
 
   echo "Download wget"
-  _download_wget_command
+  download_wget_command
 
   printf "\n\n"
 
@@ -100,7 +100,7 @@ main() {
 
   k0sctlBinary=k0sctl
   installPath=/usr/local/bin
-  k0sctlDownloadUrl="$(_download_k0sctl_url)"
+  k0sctlDownloadUrl="$(download_k0sctl_url)"
 
 
 
@@ -120,7 +120,7 @@ main() {
   fi
 
   kubectlBinary=kubectl
-  kubectlDownloadUrl="$(_download_kubectl_url)"
+  kubectlDownloadUrl="$(download_kubectl_url)"
 
   echo "Downloading kubectl from URL: $kubectlDownloadUrl"
   wget -q -cO - $kubectlDownloadUrl > $installPath/$kubectlBinary
@@ -140,7 +140,7 @@ main() {
 
 
   echo "Downloading mkectl"
-  _download_mkectl
+  download_mkectl
 
 }
 
