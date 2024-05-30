@@ -21,23 +21,16 @@ To override the default versions, you can pass the variables `K0SCTL_VERSION`,`M
 
 ### Usage
 
-1. Copy the [installation script](./install.sh) on your machine.
+1. Install the dependencies using the following command.
 
-2. Change the access permissions by running this command.
-    ```shell
-    chmod +x install.sh
+   ```shell
+   sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Mirantis/mke-docs/main/content/docs/setup/install.sh)"
     ```
 
-3. Execute the script by running the following command.
-    ```shell
-      sudo ./install.sh
-    ```
-
-
-4. The script is designed to detect the os and the underlying architecture. Based on this, it shall install the appropriate binaries `k0sctl`, `kubectl` and `mkectl` in `/usr/local/bin`.
+2. The script is designed to detect the os and the underlying architecture. Based on this, it shall install the appropriate binaries `k0sctl`, `kubectl` and `mkectl` in `/usr/local/bin`.
    > Note: Make sure /usr/local/bin is in your PATH environment variable.
 
-5. Confirm successful installations by running
+3. Confirm successful installations by running
 
    a. _mkectl version command_
 
@@ -71,7 +64,7 @@ To override the default versions, you can pass the variables `K0SCTL_VERSION`,`M
 ### Debug mode
 To turn the debug mode on, run
 ```shell
-sudo DEBUG=true ./install.sh
+sudo DEBUG=true /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mirantis/mke-docs/main/content/docs/setup/install.sh)"
 ```
 
 ### Install different version
@@ -79,7 +72,7 @@ To install non-default versions of mkectl, kubectl and k0sctl, you can use `MKEC
 
 Example usage:
 ```shell
-sudo K0SCTL_VERSION=0.17.4 ./install.sh
+sudo K0SCTL_VERSION=0.17.4 /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mirantis/mke-docs/main/content/docs/setup/install.sh)"
 ```
 
 This shall install k0sctl version 0.17.4.
