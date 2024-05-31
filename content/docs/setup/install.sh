@@ -26,35 +26,6 @@ detect_arch() {
   unset arch
 }
 
-download_curl_command() {
-  if [ "$uname" = "linux" ];
-  then
-      ID="$(grep -oP '(?<=^ID=).+' /etc/os-release | tr -d '"')"
-      case "$ID" in
-        ubuntu) installed="$(/usr/bin/dpkg-query --show --showformat='${db:Status-Status}\n' 'curl')"
-                if [ "$installed" = "installed" ]; then
-                        echo "curl is already installed."
-                else
-                        sudo apt-get -y install curl
-                fi
-                unset installed ;;
-        rhel|centos) installed="$(yum info curl | grep Repo | awk '{ print $3 }')"
-                     if [ "$installed" = "installed" ]; then
-                       echo "curl cmd is already installed."
-                     else
-                       sudo yum -y install curl
-                     fi
-                     unset installed ;;
-        *) echo "Unsupported processor architecture: $ID" 1>&2; return 1 ;;
-      esac
-      unset ID
-  else
-      if ! [ -x "$(command -v curl)" ]; then
-        brew install curl
-      fi
-  fi
-}
-
 # download_k0sctl_url() fetches the k0sctl download url.
 download_k0sctl_url() {
   echo "https://github.com/k0sproject/k0sctl/releases/download/v$K0SCTL_VERSION/k0sctl-$uname-$arch"
@@ -84,8 +55,6 @@ main() {
   uname="$(detect_uname)"
   arch="$(detect_arch)"
 
-  download_curl_command
-
   printf "\n\n"
 
   echo "Step 1/3 : Install k0sctl"
@@ -101,7 +70,6 @@ main() {
   k0sctlDownloadUrl="$(download_k0sctl_url)"
 
 
-
   echo "Downloading k0sctl from URL: $k0sctlDownloadUrl"
   curl -sSLf "$k0sctlDownloadUrl" >"$installPath/$k0sctlBinary"
 
@@ -112,20 +80,22 @@ main() {
   echo "Step 2/3 : Install kubectl"
   echo "#########################"
 
-
-  if [ -z "${KUBECTL_VERSION}" ]; then
-    echo "Using default kubectl version v1.30.0"
-    KUBECTL_VERSION=v1.30.0
-  fi
-
   kubectlBinary=kubectl
   kubectlDownloadUrl="$(download_kubectl_url)"
 
-  echo "Downloading kubectl from URL: $kubectlDownloadUrl"
-  curl -sSLf "$kubectlDownloadUrl" >$installPath/$kubectlBinary
-  sudo chmod 755 "$installPath/$kubectlBinary"
-  echo "kubectl is now executable in $installPath"
-
+  if [[ -f "$installPath/$kubectlBinary" ]]; then
+      VERSION="$($installPath/$kubectlBinary version | grep Client | cut -d: -f2)"
+      echo "$kubectlBinary version $VERSION already exists."
+  else
+    if [ -z "${KUBECTL_VERSION}" ]; then
+        echo "Using default kubectl version v1.30.0"
+        KUBECTL_VERSION=v1.30.0
+    fi
+    echo "Downloading kubectl from URL: $kubectlDownloadUrl"
+    curl -sSLf "$kubectlDownloadUrl" >$installPath/$kubectlBinary
+    sudo chmod 755 "$installPath/$kubectlBinary"
+    echo "kubectl is now executable in $installPath"
+  fi
 
   printf "\n\n"
   echo "Step 3/3 : Install mkectl"
