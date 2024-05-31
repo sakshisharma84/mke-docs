@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+PATH=$PATH:/usr/local/bin
+
 if [ -n "${DEBUG}" ]; then
   set -x
 fi
@@ -94,20 +96,11 @@ main() {
 
   kubectlBinary=kubectl
 
-  if [ "$uname" = "darwin" ]; then
-    if [ -x "$(command -v "$kubectlBinary")" ]; then
-        VERSION="$($kubectlBinary version | grep Client | cut -d: -f2)"
-        echo "$kubectlBinary version $VERSION already exists."
-    else
-      install_kubectl
-    fi
+  if [ -x "$(command -v "$kubectlBinary")" ]; then
+    VERSION="$($kubectlBinary version | grep Client | cut -d: -f2)"
+    echo "$kubectlBinary version $VERSION already exists."
   else
-    if [ -f "$installPath/$kubectlBinary" ]; then
-      VERSION="$($installPath/$kubectlBinary version | grep Client | cut -d: -f2)"
-      echo "$kubectlBinary version $VERSION already exists."
-    else
-      install_kubectl
-    fi
+    install_kubectl
   fi
 
   printf "\n\n"
