@@ -26,31 +26,31 @@ detect_arch() {
   unset arch
 }
 
-download_wget_command() {
+download_curl_command() {
   if [ "$uname" = "linux" ];
   then
       ID="$(grep -oP '(?<=^ID=).+' /etc/os-release | tr -d '"')"
       case "$ID" in
-        ubuntu) installed="$(/usr/bin/dpkg-query --show --showformat='${db:Status-Status}\n' 'wget')"
+        ubuntu) installed="$(/usr/bin/dpkg-query --show --showformat='${db:Status-Status}\n' 'curl')"
                 if [ "$installed" = "installed" ]; then
-                        echo "wget is already installed."
+                        echo "curl is already installed."
                 else
-                        sudo apt-get -y install wget
+                        sudo apt-get -y install curl
                 fi
                 unset installed ;;
-        rhel|centos) installed="$(yum info wget | grep Repo | awk '{ print $3 }')"
+        rhel|centos) installed="$(yum info curl | grep Repo | awk '{ print $3 }')"
                      if [ "$installed" = "installed" ]; then
-                       echo "wget cmd is already installed."
+                       echo "curl cmd is already installed."
                      else
-                       sudo yum -y install wget
+                       sudo yum -y install curl
                      fi
                      unset installed ;;
         *) echo "Unsupported processor architecture: $ID" 1>&2; return 1 ;;
       esac
       unset ID
   else
-      if ! [ -x "$(command -v wget)" ]; then
-        brew install wget
+      if ! [ -x "$(command -v curl)" ]; then
+        brew install curl
       fi
   fi
 }
@@ -75,8 +75,7 @@ download_mkectl() {
   then
     arch=x86_64
   fi
-  wget -q https://s3.us-east-2.amazonaws.com/packages-stage-mirantis.com/${MKECTL_VERSION}/mkectl_${uname}_${arch}.tar.gz
-  tar -xvzf mkectl_${uname}_${arch}.tar.gz -C $installPath
+  curl --silent -L -s https://s3.us-east-2.amazonaws.com/packages-stage-mirantis.com/${MKECTL_VERSION}/mkectl_${uname}_${arch}.tar.gz | tar -xvzf - -C $installPath
   echo "mkectl is now executable in $installPath"
 }
 
@@ -85,8 +84,7 @@ main() {
   uname="$(detect_uname)"
   arch="$(detect_arch)"
 
-  echo "Download wget"
-  download_wget_command
+  download_curl_command
 
   printf "\n\n"
 
@@ -105,7 +103,7 @@ main() {
 
 
   echo "Downloading k0sctl from URL: $k0sctlDownloadUrl"
-  wget -q -cO - $k0sctlDownloadUrl > $installPath/$k0sctlBinary
+  curl -sSLf "$k0sctlDownloadUrl" >"$installPath/$k0sctlBinary"
 
   sudo chmod 755 "$installPath/$k0sctlBinary"
   echo "k0sctl is now executable in $installPath"
@@ -113,6 +111,7 @@ main() {
   printf "\n\n"
   echo "Step 2/3 : Install kubectl"
   echo "#########################"
+
 
   if [ -z "${KUBECTL_VERSION}" ]; then
     echo "Using default kubectl version v1.30.0"
@@ -123,7 +122,7 @@ main() {
   kubectlDownloadUrl="$(download_kubectl_url)"
 
   echo "Downloading kubectl from URL: $kubectlDownloadUrl"
-  wget -q -cO - $kubectlDownloadUrl > $installPath/$kubectlBinary
+  curl -sSLf "$kubectlDownloadUrl" >$installPath/$kubectlBinary
   sudo chmod 755 "$installPath/$kubectlBinary"
   echo "kubectl is now executable in $installPath"
 
