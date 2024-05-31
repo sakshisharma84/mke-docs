@@ -40,6 +40,18 @@ download_kubectl_url() {
   echo "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/${uname}/${arch}/kubectl"
 }
 
+install_kubectl() {
+  if [ -z "${KUBECTL_VERSION}" ]; then
+    echo "Using default kubectl version v1.30.0"
+    KUBECTL_VERSION=v1.30.0
+  fi
+  kubectlDownloadUrl="$(download_kubectl_url)"
+  echo "Downloading kubectl from URL: $kubectlDownloadUrl"
+  curl -sSLf "$kubectlDownloadUrl" >$installPath/$kubectlBinary
+  sudo chmod 755 "$installPath/$kubectlBinary"
+  echo "kubectl is now executable in $installPath"
+}
+
 # download_mkectl downloads the mkectl binary.
 download_mkectl() {
   if [ "$arch" = "x64" ] || [ "$arch" = "amd64" ];
@@ -81,20 +93,21 @@ main() {
   echo "#########################"
 
   kubectlBinary=kubectl
-  kubectlDownloadUrl="$(download_kubectl_url)"
 
-  if [[ -f "$installPath/$kubectlBinary" ]]; then
+  if [ "$uname" = "darwin" ]; then
+    if [ -x "$(command -v "$kubectlBinary")" ]; then
+        VERSION="$($kubectlBinary version | grep Client | cut -d: -f2)"
+        echo "$kubectlBinary version $VERSION already exists."
+    else
+      install_kubectl
+    fi
+  else
+    if [[ -f "$installPath/$kubectlBinary" ]]; then
       VERSION="$($installPath/$kubectlBinary version | grep Client | cut -d: -f2)"
       echo "$kubectlBinary version $VERSION already exists."
-  else
-    if [ -z "${KUBECTL_VERSION}" ]; then
-        echo "Using default kubectl version v1.30.0"
-        KUBECTL_VERSION=v1.30.0
+    else
+      install_kubectl
     fi
-    echo "Downloading kubectl from URL: $kubectlDownloadUrl"
-    curl -sSLf "$kubectlDownloadUrl" >$installPath/$kubectlBinary
-    sudo chmod 755 "$installPath/$kubectlBinary"
-    echo "kubectl is now executable in $installPath"
   fi
 
   printf "\n\n"
