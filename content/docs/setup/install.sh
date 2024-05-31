@@ -102,7 +102,7 @@ main() {
       install_kubectl
     fi
   else
-    if [[ -f "$installPath/$kubectlBinary" ]]; then
+    if [ -f "$installPath/$kubectlBinary" ]; then
       VERSION="$($installPath/$kubectlBinary version | grep Client | cut -d: -f2)"
       echo "$kubectlBinary version $VERSION already exists."
     else
