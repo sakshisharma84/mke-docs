@@ -18,6 +18,7 @@ You can use the [installation script](./install.sh) to install the following dep
 
 To override the default versions, you can pass the variables `K0SCTL_VERSION`,`MKECTL_VERSION`and `KUBECTL_VERSION`.
 
+> P.S. The script detects if kubectl is already installed in the system. If so, it will not overwrite it.
 
 ### Usage
 
