@@ -35,11 +35,7 @@ commit: 372a589
 ```
 - Create a `hosts.yaml` file that describes information needed by `mkectl` to connect to each node via ssh. This is needed to perform an upgrade. An example file is shown below:
 
-```shell
-cat hosts.yaml
-```
-
-```shell
+```yaml
 hosts:
   - address: <host1-external-ip>
     port: <ssh-port>
@@ -51,6 +47,19 @@ hosts:
     keyPath: <path-to-ssh-key>
 ```
 
+
+Example
+```yaml
+hosts:
+  - address: 35.167.183.127
+    port: 22
+    user: docker
+    keyPath: ~/.ssh/cluster.pem
+  - address: 35.87.36.29
+    port: 22
+    user: docker
+    keyPath: ~/.ssh/cluster.pem
+```
 
 ## Perform the Upgrade
 
