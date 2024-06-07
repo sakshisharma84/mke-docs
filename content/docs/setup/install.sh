@@ -108,8 +108,8 @@ main() {
   echo "#########################"
 
   if [ -z "${MKECTL_VERSION}" ]; then
-    echo "Using default mkectl version v4.0.0-alpha.0.5"
-    MKECTL_VERSION=v4.0.0-alpha.0.5
+    echo "Using default mkectl version v4.0.0-alpha1.0"
+    MKECTL_VERSION=v4.0.0-alpha1.0
   fi
   printf "\n"
 
