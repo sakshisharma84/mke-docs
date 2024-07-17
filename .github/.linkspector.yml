@@ -1,7 +1,0 @@
-dirs:
-  - ./content/
-
-useGitIgnore: true
-
-ignorePatterns:
-  - pattern: '^http://localhost:.*$'
