@@ -94,20 +94,23 @@ are performed through the use of the `mkectl` tool:
 - Carry out post-upgrade cleanup, to remove MKE 3 components.
 - Output the new MKE 4 config file.
 
-To upgrade an MKE 3 cluster, run the following command:
+To upgrade an MKE 3 cluster, use the `mkectl upgrade` command:
 
 ```shell
-mkectl upgrade --hosts-path <path-to-hosts-yaml> --admin-username <admin-username> --admin-password <admin-password>
+mkectl upgrade --hosts-path <path-to-hosts-yaml> \
+  --mke3-admin-username <admin-username> \
+  --mke3-admin-password <admin-password> \
+  --external-address <external-address>\
+  --config-out <path-to-desired-file-location>
 ```
 
-{{< callout type="info" >}}
+The external address is the domain name of the load balancer. For details,
+see [System requirements: Load balancer requirements](../getting-started/system-requirements#load-balancer-requirements).
 
-The MKE 4 config file prints to your console when the migration is complete. To
-output the config file to a file for future use, run `mkectl apply`.
-Alternatively, you can set the `--config-out` flag to the path where you want
-to save the MKE 4 config file.
-
-{{< /callout >}}
+The `--config-out` flag allows you to specify a path where the MKE 4 configuration
+file will be automatically created and saved during migration. If not specified,
+the configuration file prints to your console on completion. In this case, save
+the output to a file for future reference
 
 The upgrade process requires time to complete. Once the process is complete,
 run the following command to verify that the MKE 4 cluster is operating:

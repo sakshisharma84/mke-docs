@@ -50,13 +50,13 @@ by selecting the desired region from the dropdown menu in the top-right corner.
 
 ## Install MKE on k0s
 
-1. Generate a sample `mke.yaml` file:
+1. Generate a sample `mke4.yaml` file:
 
    ```shell
-   mkectl init > mke.yaml
+   mkectl init > mke4.yaml
    ```
 
-2. Edit the `hosts` section in `mke.yaml` using the values from the `VMs.yaml`
+2. Edit the `hosts` section in `mke4.yaml` using the values from the `VMs.yaml`
    file. Example configuration of the `hosts` section:
 
    ```yaml
@@ -75,11 +75,26 @@ by selecting the desired region from the dropdown menu in the top-right corner.
          user: ubuntu
    ```
 
-3. Create the MKE cluster:
+3. Edit the `apiServer.externalAddress` in the configuration file
+
+    ```sh
+    terraform output -raw lb_dns_name | { read lb; yq -i ".apiServer.externalAddress = \"$lb\"" mke4.yaml; }
+    ```
+    
+    If you do not have the `yq` tool installed, edit the `mke4.yaml` file manually
+    setting `apiServer.externalAddress` to the output of the `terraform output -raw lb_dns_name` command.
+
+4. Create the MKE cluster:
 
    ```shell
-   mkectl apply -f mke.yaml
+   mkectl apply -f mke4.yaml
    ```
+   {{< callout type="info" >}}
+   Upon successful completion of the MKE 4 installation, a username and password
+   will be automatically generated and displayed once for you to use.
+  
+   To explicitly set a password value, run `mkectl apply -f mke4.yaml --admin-password <password>` .
+   {{< /callout >}}
 
 ## Clean up infrastructure
 
