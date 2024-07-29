@@ -20,11 +20,11 @@ your preferred method.
 ## Prerequisites
 
 - **Identity Provider (IdP):** To set OIDC or SAML you need to configure an IdP
-  with an application. Refer to [OIDC](../../operations/authentication/OIDC-providers/OIDC) or
-  [SAML](../../operations/authentication/SAML-providers/SAML) for detailed procedures.
+  with an application. Refer to [OIDC](../../operations/authentication/oidc-providers/oidc) or
+  [SAML](../../operations/authentication/saml-providers/saml) for detailed procedures.
 
 - **LDAP Server:** To set LDAP, configure the LDAP server with the users as described in
-  [LDAP](../../operations/authentication/LDAP).
+  [LDAP](../../operations/authentication/ldap).
 
 ## Configuration
 
