@@ -27,7 +27,7 @@ the `lameduck` section of the MKE configuration file under `dns`:
 | duration                   | Length of time during which lameduck will run, expessed with integers and time suffixes, such as s for seconds and m for minutes.                                            | 7s      |
 
 
-<callout type="info"> Editing the CoreDNS config map outside MKE to configure the lameduck function is not supported. Any changes made will be overridden by the values set in the MKE configuration file whenever `mkectl apply` is executed.</callout>
+<callout type="info"> Editing the CoreDNS config map outside MKE(using `kubectl edit`)  to configure the lameduck function is not supported. Any changes made will be overridden by the values set in the MKE configuration file whenever `mkectl apply` is executed.</callout>
 
 ## Applying configuration
 
