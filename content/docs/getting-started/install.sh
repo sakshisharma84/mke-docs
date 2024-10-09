@@ -20,7 +20,8 @@ detect_uname() {
 detect_arch() {
   arch="$(uname -m)"
   case "$arch" in
-    amd64|x86_64) echo "x64" ;;
+    amd64) echo "amd64" ;;
+    x86_64) echo "x64" ;;
     arm64|aarch64) echo "arm64" ;;
     armv7l|armv8l|arm) echo "arm" ;;
     *) echo "Unsupported processor architecture: $arch" 1>&2; return 1 ;;
@@ -30,6 +31,10 @@ detect_arch() {
 
 # download_k0sctl_url() fetches the k0sctl download url.
 download_k0sctl_url() {
+  if [ "$arch" = "x64" ];
+    then
+      arch=amd64
+  fi
   echo "https://github.com/k0sproject/k0sctl/releases/download/v$K0SCTL_VERSION/k0sctl-$uname-$arch"
 }
 
