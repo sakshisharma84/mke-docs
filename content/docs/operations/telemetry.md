@@ -12,15 +12,19 @@ services.
 
 ## Enable telemetry through the MKE CLI
 
-Go to the `mkeconfig` object in the `mke` namespace and set `tracking.enabled` to `true`.
+1. Access the MKE configuration file.
+2. Set the `telemetry.enabled` field to `true`.
 
-```bash
-kubectl edit mkeconfig -n mke
-```
+   ```yaml
+   spec:
+     tracking:
+       enabled: true
+   ```
 
-`mke-operator` will take a few moments to reconcile the change in the
-configuration, after which MKE will thereafter transmit key usage data to
-Mirantis by way of a secure Segment endpoint.
+4. Run the  `mkectl apply` command to apply the new settings.
+
+After a few moments, the change will reconcile in the configuration. From this point onward,
+MKE will transmit key usage data to Mirantis by way of a secure Segment endpoint.
 
 ## Enable telemetry through the MKE web UI
 
