@@ -10,11 +10,30 @@ offering a comprehensive solution for collecting, storing, and visualizing metri
 
 Detail for the MKE 4 monitor tools is provided in the following table:
 
-| Monitoring tool    | Default state | Configuration key          | Description                                                                           |
-|------------|---------------|----------------------------|---------------------------------------------------------------------------------------|
-| Grafana    | enabled       | `monitoring.enableGrafana` | Provides a web interface for viewing metrics and logs collected by Prometheus         |
-| Prometheus | enabled       | -                          | Collects and stores metrics                                                           |
-| Opscare    | disabled      | `monitoring.enableOpscare` | (Under development) Supplies additional monitoring capabilities, such as Alertmanager |
+| Monitoring tool | Default state | Configuration key           | Description                                                                           |
+|-----------------|---------------|-----------------------------|---------------------------------------------------------------------------------------|
+| Prometheus      | enabled       | -                           | Collects and stores metrics                                                           |
+| Grafana         | enabled       | `monitoring.enableGrafana`  | Provides a web interface for viewing metrics and logs collected by Prometheus         |
+| cAdvisor        | disabled      | `monitoring.enableCAdvisor` | Provides additional container level metrics                                           |
+| Opscare         | disabled      | `monitoring.enableOpscare`  | (Under development) Supplies additional monitoring capabilities, such as Alertmanager |
+
+## Prometheus
+
+[Prometheus](https://prometheus.io/) is an open-source monitoring and alerting
+toolkit, designed for reliability and scalability, that collects and stores metrics
+as time series data. It offers powerful query capabilities and a flexible alerting system.
+
+The Prometheus API is available at `https://<mke4_url>/prometheus/`
+
+To access the Prometheus dashboard:
+
+1. Port forward Prometheus:
+
+    ```bash
+    kubectl --namespace mke port-forward svc/prometheus-operated 9090
+    ```
+
+2. Navigate to `http://localhost:9090`.
 
 ## Grafana
 
@@ -34,7 +53,8 @@ To access the Grafana dashboard:
 
    ```bash
    kubectl get secret monitoring-grafana -n mke -o jsonpath="{.data.admin-password}" | base64 --decode
-   
+   ```
+
 2. Port forward Grafana:
 
     ```bash
@@ -47,21 +67,17 @@ To access the Grafana dashboard:
 
 5. Click **Log In**.
    
-## Prometheus
+## cAdvisor
 
-[Prometheus](https://prometheus.io/) is an open-source monitoring and alerting
-toolkit that is designed for reliability and scalability. It collects and stores metrics
-as time series data, providing powerful query capabilities and a flexible alerting system.
+[cAdvisor](https://github.com/google/cadvisor) is an open-source tool that collects, aggregates, processes, 
+and exports information in reference to running containers.
 
-To access the Prometheus dashboard:
+cAdvisor is disabled in MKE by default. You can enable the tool through the MKE configuration file:
 
-1. Port forward Prometheus:
-
-    ```bash
-    kubectl --namespace mke port-forward svc/prometheus-operated 9090
-    ```
-
-2. Navigate to `http://localhost:9090` to view the status page of Prometheus.
+```yaml
+monitoring:
+  enableCAdvisor: true
+```
 
 ## Opscare (Under development)
 
