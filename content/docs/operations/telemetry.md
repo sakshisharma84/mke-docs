@@ -10,17 +10,25 @@ use MKE. It also provides product usage statistics, which is key feedback that
 helps product teams in their efforts to enhance Mirantis products and
 services.
 
+{{< callout type="note" >}}
+    Telemetry is automatically enabled for MKE 4 clusters that are running without a license, with a license that has expired, or with an invalid license. In all of such scenarios, you will only be able to disable telemetry once a valid license has been applied to the cluster.
+{{< /callout >}}
+
 ## Enable telemetry through the MKE CLI
 
-Go to the `mkeconfig` object in the `mke` namespace and set `tracking.enabled` to `true`.
+1. Access the MKE configuration file.
+2. Set the `telemetry.enabled` field to `true`.
 
-```bash
-kubectl edit mkeconfig -n mke
-```
+   ```yaml
+   spec:
+     tracking:
+       enabled: true
+   ```
 
-`mke-operator` will take a few moments to reconcile the change in the
-configuration, after which MKE will thereafter transmit key usage data to
-Mirantis by way of a secure Segment endpoint.
+4. Run the  `mkectl apply` command to apply the new settings.
+
+After a few moments, the change will reconcile in the configuration. From this point onward,
+MKE will transmit key usage data to Mirantis by way of a secure Segment endpoint.
 
 ## Enable telemetry through the MKE web UI
 

@@ -20,7 +20,8 @@ detect_uname() {
 detect_arch() {
   arch="$(uname -m)"
   case "$arch" in
-    amd64|x86_64) echo "x64" ;;
+    amd64) echo "amd64" ;;
+    x86_64) echo "x64" ;;
     arm64|aarch64) echo "arm64" ;;
     armv7l|armv8l|arm) echo "arm" ;;
     *) echo "Unsupported processor architecture: $arch" 1>&2; return 1 ;;
@@ -30,6 +31,10 @@ detect_arch() {
 
 # download_k0sctl_url() fetches the k0sctl download url.
 download_k0sctl_url() {
+  if [ "$arch" = "x64" ];
+    then
+      arch=amd64
+  fi
   echo "https://github.com/k0sproject/k0sctl/releases/download/v$K0SCTL_VERSION/k0sctl-$uname-$arch"
 }
 
@@ -75,8 +80,8 @@ main() {
   echo "#########################"
 
   if [ -z "${K0SCTL_VERSION}" ]; then
-    echo "Using default k0sctl version 0.17.8"
-    K0SCTL_VERSION=0.17.8
+    echo "Using default k0sctl version 0.19.0"
+    K0SCTL_VERSION=0.19.0
   fi
 
   k0sctlBinary=k0sctl
@@ -108,8 +113,8 @@ main() {
   echo "#########################"
 
   if [ -z "${MKECTL_VERSION}" ]; then
-    echo "Using default mkectl version v4.0.0-alpha.5.0"
-    MKECTL_VERSION=v4.0.0-alpha.5.0
+    echo "Using default mkectl version v4.0.0-rc.1"
+    MKECTL_VERSION=v4.0.0-rc.1
   fi
   printf "\n"
 

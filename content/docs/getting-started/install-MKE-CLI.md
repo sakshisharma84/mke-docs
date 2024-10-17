@@ -22,7 +22,7 @@ To automatically install the necessary dependencies, you can use an
    and `K0SCTL_VERSION` as required. For example:
 
    ```shell
-   sudo K0SCTL_VERSION=0.17.4 /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mirantis/mke-docs/main/content/docs/getting-started/install.sh)"
+   sudo K0SCTL_VERSION=0.19.0 /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mirantis/mke-docs/main/content/docs/getting-started/install.sh)"
    ```
 
    If you prefer to run the script in the debug mode for more detailed output and logging,
@@ -44,7 +44,7 @@ To automatically install the necessary dependencies, you can use an
        Expected output:
 
        ```shell
-       Version: v4.0.0-alpha.5.0
+       Version: v4.0.0-rc.1
        ```
      {{< /tab >}}
 
@@ -56,7 +56,7 @@ To automatically install the necessary dependencies, you can use an
        Expected output:
 
        ```shell
-       version: v0.17.8
+       version: v0.19.0
        commit: b061291
        ```
 
@@ -79,7 +79,7 @@ To automatically install the necessary dependencies, you can use an
       ```shell
       Client Version: v1.30.0
       Kustomize Version: v5.0.4-0.20230601165947-6ce0bf390ce3
-      Server Version: v1.29.3+k0s
+      Server Version: v1.30.3+k0s
       ```
    {{< /tab >}}
 
@@ -89,8 +89,8 @@ By default, the script installs the following software:
 
 | Tool     | Default version   |
 |----------|-------------------|
-| `mkectl` | v4.0.0-alpha.5.0  |
-| `k0sctl` | 0.17.8            |
+| `mkectl` | v4.0.0-rc.1       |
+| `k0sctl` | 0.19.0            |
 | `kubectl`| v1.30.0           |
 
 The `install.sh` script detects whether `kubectl` is already installed on your
@@ -107,12 +107,12 @@ Download `mkectl` from the S3 bucket:
 
 | Distribution | Architecture | Download |
 |--------------|--------------|----------|
-| Linux        | arm64        | [download](https://s3.us-east-2.amazonaws.com/packages-stage-mirantis.com/v4.0.0-alpha.5.0/mkectl_linux_arm64.tar.gz) |
-| Linux        | x86_64       | [download](https://s3.us-east-2.amazonaws.com/packages-stage-mirantis.com/v4.0.0-alpha.5.0/mkectl_linux_x86_64.tar.gz) |
-| MacOS        | arm64        | [download](https://s3.us-east-2.amazonaws.com/packages-stage-mirantis.com/v4.0.0-alpha.5.0/mkectl_darwin_arm64.tar.gz) |
-| MacOS        | x86_64       | [download](https://s3.us-east-2.amazonaws.com/packages-stage-mirantis.com/v4.0.0-alpha.5.0/mkectl_darwin_x86_64.tar.gz) |
-| Windows      | arm64        | [download](https://s3.us-east-2.amazonaws.com/packages-stage-mirantis.com/v4.0.0-alpha.5.0/mkectl_windows_arm64.zip) |
-| Windows      | x86_64       | [download](https://s3.us-east-2.amazonaws.com/packages-stage-mirantis.com/v4.0.0-alpha.5.0/mkectl_windows_x86_64.zip) |
+| Linux        | arm64        | [download](https://s3.us-east-2.amazonaws.com/packages-stage-mirantis.com/v4.0.0-rc.1/mkectl_linux_arm64.tar.gz) |
+| Linux        | x86_64       | [download](https://s3.us-east-2.amazonaws.com/packages-stage-mirantis.com/v4.0.0-rc.1/mkectl_linux_x86_64.tar.gz) |
+| MacOS        | arm64        | [download](https://s3.us-east-2.amazonaws.com/packages-stage-mirantis.com/v4.0.0-rc.1/mkectl_darwin_arm64.tar.gz) |
+| MacOS        | x86_64       | [download](https://s3.us-east-2.amazonaws.com/packages-stage-mirantis.com/v4.0.0-rc.1/mkectl_darwin_x86_64.tar.gz) |
+| Windows      | arm64        | [download](https://s3.us-east-2.amazonaws.com/packages-stage-mirantis.com/v4.0.0-rc.1/mkectl_windows_arm64.zip) |
+| Windows      | x86_64       | [download](https://s3.us-east-2.amazonaws.com/packages-stage-mirantis.com/v4.0.0-rc.1/mkectl_windows_x86_64.zip) |
 
 The MKE CLI is a single binary that is capable of managing MKE clusters without
 any additional dependencies. Its use, though, requires that you have the
@@ -120,6 +120,6 @@ following tools on your system:
 
 | Tool     | Version          | Download |
 |----------|------------------|----------|
-| kubectl  | 1.29.0 or later  | [download](https://kubernetes.io/docs/tasks/tools/#kubectl) |
-| k0sctl   | 0.17.0 or later but less than `0.18.0` | [download](https://github.com/k0sproject/k0sctl/releases) |
+| kubectl  | 1.30.0 or later  | [download](https://kubernetes.io/docs/tasks/tools/#kubectl) |
+| k0sctl   | 0.19.0 or later  | [download](https://github.com/k0sproject/k0sctl/releases) |
 

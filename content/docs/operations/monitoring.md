@@ -10,11 +10,30 @@ offering a comprehensive solution for collecting, storing, and visualizing metri
 
 Detail for the MKE 4 monitor tools is provided in the following table:
 
-| Monitoring tool    | Default state | Configuration key          | Description                                                                           |
-|------------|---------------|----------------------------|---------------------------------------------------------------------------------------|
-| Grafana    | enabled       | `monitoring.enableGrafana` | Provides a web interface for viewing metrics and logs collected by Prometheus         |
-| Prometheus | enabled       | -                          | Collects and stores metrics                                                           |
-| Opscare    | disabled      | `monitoring.enableOpscare` | (Under development) Supplies additional monitoring capabilities, such as Alertmanager |
+| Monitoring tool | Default state | Configuration key           | Description                                                                           |
+|-----------------|---------------|-----------------------------|---------------------------------------------------------------------------------------|
+| Prometheus      | enabled       | -                           | Collects and stores metrics                                                           |
+| Grafana         | enabled       | `monitoring.enableGrafana`  | Provides a web interface for viewing metrics and logs collected by Prometheus         |
+| cAdvisor        | disabled      | `monitoring.enableCAdvisor` | Provides additional container level metrics                                           |
+| Opscare         | disabled      | `monitoring.enableOpscare`  | (Under development) Supplies additional monitoring capabilities, such as Alertmanager |
+
+## Prometheus
+
+[Prometheus](https://prometheus.io/) is an open-source monitoring and alerting
+toolkit, designed for reliability and scalability, that collects and stores metrics
+as time series data. It offers powerful query capabilities and a flexible alerting system.
+
+The Prometheus API is available at `https://<mke4_url>/prometheus/`
+
+To access the Prometheus dashboard:
+
+1. Port forward Prometheus:
+
+    ```bash
+    kubectl --namespace mke port-forward svc/prometheus-operated 9090
+    ```
+
+2. Navigate to `http://localhost:9090`.
 
 ## Grafana
 
@@ -30,29 +49,35 @@ monitoring:
 
 To access the Grafana dashboard:
 
-1. Run the following command to `port-forward` Grafana:
+1. Obtain the `admin` user password for the Grafana dashboard from the `monitoring-grafana` secret in the `mke` namespace.
+
+   ```bash
+   kubectl get secret monitoring-grafana -n mke -o jsonpath="{.data.admin-password}" | base64 --decode
+   ```
+
+2. Port forward Grafana:
 
     ```bash
     kubectl --namespace mke port-forward svc/monitoring-grafana 3000:80
     ```
 
-2. Go to `http://localhost:3000`.
+3. Navigate to `http://localhost:3000` to access the **Welcome to Grafana** login page.
 
-## Prometheus
+4. Enter the default username **admin** into the **Email or username** field and type the password you retrieved from the `monitoring-grafana` secret into the **Password** field.
 
-[Prometheus](https://prometheus.io/) is an open-source monitoring and alerting
-toolkit that is designed for reliability and scalability. It collects and stores metrics
-as time series data, providing powerful query capabilities and a flexible alerting system.
+5. Click **Log In**.
+   
+## cAdvisor
 
-To access the Prometheus dashboard:
+[cAdvisor](https://github.com/google/cadvisor) is an open-source tool that collects, aggregates, processes, 
+and exports information in reference to running containers.
 
-1. Run the following command to `port-forward` Prometheus:
+cAdvisor is disabled in MKE by default. You can enable the tool through the MKE configuration file:
 
-    ```bash
-    kubectl --namespace mke port-forward svc/prometheus-operated 9090
-    ```
-
-2. Go to `http://localhost:9090`.
+```yaml
+monitoring:
+  enableCAdvisor: true
+```
 
 ## Opscare (Under development)
 

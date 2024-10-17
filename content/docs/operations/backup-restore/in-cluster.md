@@ -1,13 +1,19 @@
 ---
-title: Use the in-cluster storage provider
-weight: 1
+title: Back up with an in-cluster storage provider
+weight: 2
 ---
 
 By default, MKE 4 stores backups and restores using the in-cluster storage
-provider, the [MinIO addon](https://microk8s.io/docs/addon-minio).
+provider, the [MinIO add-on](https://min.io/).
 
->The offered instructions assume that you have created a cluster and
-applied a blueprint with the default MKE backup configuration.
+{{< callout type="note" >}}
+  MinIO is not currently backed by persistent storage. For persistent storage of backups, use an external storage provider or download the MinIO backups.
+{{< /callout >}}
+
+{{< callout type="info" >}}
+   The offered instructions assume that you have created a cluster and
+   applied a blueprint with the default MKE backup configuration.
+{{< /callout >}}
 
 ## Create an in-cluster backup
 
@@ -32,8 +38,13 @@ INFO[0012] Waiting for backup to complete. Current phase: InProgress
 INFO[0015] Waiting for backup to complete. Current phase: Completed
 ```
 
-The backup should be present in the MinIO bucket. To list the backups, run
-the `mkectl backup list` command:
+The backup should be present in the MinIO bucket. 
+
+To list the backups, run:
+
+```shell
+mkectl backup list
+```
 
 Example output:
 
@@ -43,10 +54,11 @@ NAME   STATUS      ERRORS   WARNINGS   CREATED                         EXPIRES  
 test   Completed   0        0          2024-05-07 17:29:18 -0400 EDT   29d       default            <none>
 ```
 
-Optionally, you can view detailed logs of a backup by running the `mkectl
-backup logs --name test` command.
+To view detailed logs of a backup, log in to the MinIO UI. 
 
 ## Restore from an in-cluster backup
+
+A restore operation returns the Kubernetes cluster to the state it was in at the time the backup you selected was created.
 
 To perform a restore using an in-cluster backup, run:
 
@@ -75,8 +87,8 @@ INFO[0027] Restore test-20240507173309 completed successfully
 To list the restores, run:
 
 ```shell
- mkectl restore list
- ```
+mkectl restore list
+```
 
 Example output:
 
@@ -86,7 +98,29 @@ NAME                  BACKUP   STATUS      STARTED                         COMPL
 test-20240507173309   test     Completed   2024-05-07 17:33:09 -0400 EDT   2024-05-07 17:33:34 -0400 EDT   0        121        2024-05-07 17:33:09 -0400 EDT   <none>
 ```
 
-Optionally, you can view detailed logs by running the
-`mkectl restore logs --name test-20240507173309` command.
+To view detailed logs, log in to the MinIO UI.
 
+## Access the MinIO Console
 
+To access the MinIO Console:
+
+1. Obtain the username from your cluster:
+
+   ```shell
+   kubectl --kubeconfig <path_to_kubeconfig> get secret -n mke minio-credentials -o jsonpath='{.data.root-user}' | base64 -d
+   ```
+
+2. Obtain the password from your cluster:
+
+   ```shell
+   kubectl --kubeconfig <path_to_kubeconfig> get secret -n mke minio-credentials -o jsonpath='{.data.root-password}' | base64 -d
+   ```
+
+3. Navigate to the external address for your ingress controller under `/minio/`.
+
+   Example:
+   `https://<external_address>/minio/`
+
+4. Log in using the username and password. The Velero bucket displays under the Object browser, and you can download or upload backups, using the options provided by the MinIO UI.
+
+   ![MinIO UI](minio_ui.png)
