@@ -110,17 +110,17 @@ The following configuration gives MetalLB control over IPs from 192.168.1.240 to
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
-name: first-pool
-namespace: metallb-system
+  name: cheap
+  namespace: metallb-system
 spec:
-addresses:
-- 192.168.1.240-192.168.1.250
+  addresses:
+  - 192.168.10.0/24
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
 metadata:
-name: example
-namespace: metallb-system
+  name: empty
+  namespace: metallb-system
 ```
 
 For advanced configuration, refer to [Advanced Configuration](https://metallb.universe.tf/configuration/_advanced_ipaddresspool_configuration)
