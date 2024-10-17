@@ -106,6 +106,7 @@ For information on how to create IP address pools, the users can refer metallb d
 The following configuration gives MetalLB control over IPs from 192.168.1.240 to 192.168.1.250, and configures Layer 2 mode.
 
 ```yaml
+---
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
@@ -132,7 +133,7 @@ During the upgrade, if metalLB is enabled in MKE 3, the configured IP address po
 
 MetalLB enabled in MKE 3 with the following configuration.
 
-```yaml
+```toml
 [cluster_config.metallb_config]
   enabled = true
 
