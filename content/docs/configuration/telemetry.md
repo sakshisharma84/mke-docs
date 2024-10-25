@@ -11,6 +11,10 @@ helps product teams in their efforts to enhance Mirantis products and
 services.
 
 {{< callout type="info" >}}
+    The MKE 4 telemetry enablement setting is automatically applied to the k0s configuration. 
+{{< /callout >}}
+
+{{< callout type="info" >}}
    Telemetry is automatically enabled for MKE 4 clusters that are running
    without a license, with a license that has expired, or with an invalid
    license. In all of such scenarios, you can only disable
